@@ -92,7 +92,7 @@ function App() {
 
   return (
     <>
-      <div className="App container-md">
+      <div className="App container-sm">
         <h1>25 + 5 Clock</h1>
         <div id="timer-settings">
           <TimerSetting
