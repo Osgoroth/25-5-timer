@@ -1,5 +1,5 @@
 import "./App.scss";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import alarm from "./alarm.mp3";
 
 function App() {
@@ -91,55 +91,74 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <TimerSetting
-        title={"Break length"}
-        type={"break"}
-        time={breakLength}
-        changeTime={changeTime}
-        formatTime={formatTime}
-      />
-      <TimerSetting
-        title={"Session Length"}
-        type={"session"}
-        time={sessionLength}
-        changeTime={changeTime}
-        formatTime={formatTime}
-      />
-      {/* displayed time */}
-      <div id="timer">
-        <div id="timer-label">{onBreak ? "Break" : "Session"}</div>
-        <div id="time-left">{formatTime(sessionTime)}</div>
-        <button id="start_stop" onClick={startStopTimer}>
-          <i class="bi bi-play-fill"></i>
-          <i class="bi bi-pause-fill"></i>
-        </button>
-        <button id="reset" onClick={resetTimer}>
-          <i class="bi bi-skip-start-fill"></i>
-        </button>
-        <audio
-          ref={(audio) => (alarm = audio)}
-          id="beep"
-          preload="auto"
-          src={beep}
-        />
+    <>
+      <div className="App container-md">
+        <h1>25 + 5 Clock</h1>
+        <div id="timer-settings">
+          <TimerSetting
+            title={"Break length"}
+            type={"break"}
+            time={breakLength}
+            changeTime={changeTime}
+            formatTime={formatTime}
+          />
+          <TimerSetting
+            title={"Session Length"}
+            type={"session"}
+            time={sessionLength}
+            changeTime={changeTime}
+            formatTime={formatTime}
+          />
+        </div>
+        {/* displayed time */}
+        <div id="timer">
+          <div id="timer-label">{onBreak ? "Break" : "Session"}</div>
+          <div id="time-left">{formatTime(sessionTime)}</div>
+
+          <i
+            id="start_stop"
+            className={`bi ${!isRunning ? "bi-play-fill" : " bi-pause-fill"}`}
+            onClick={startStopTimer}
+          ></i>
+
+          <i id="reset" class="bi bi-skip-start-fill" onClick={resetTimer}></i>
+
+          <audio
+            ref={(audio) => (alarm = audio)}
+            id="beep"
+            preload="auto"
+            src={beep}
+          />
+        </div>
       </div>
-    </div>
+      <div id="footer">
+        <p>Written and directed by</p>
+        <p id="creator">David Lucas</p>
+      </div>
+    </>
   );
 }
 
 function TimerSetting({ title, type, time, changeTime, formatTime }) {
   return (
-    <>
+    <div class="timer-group">
       <div id={`${type}-label`}>{title}</div>
-      <button id={`${type}-decrement`} onClick={() => changeTime(type, -1)}>
-        <i class="bi bi-dash-square-fill"></i>
-      </button>
-      <button id={`${type}-increment`} onClick={() => changeTime(type, 1)}>
-        <i class="bi bi-plus-square-fill"></i>
-      </button>
-      <div id={`${type}-length`}>{time}</div>
-    </>
+      <div className="button-group">
+        <i
+          id={`${type}-decrement`}
+          onClick={() => changeTime(type, -1)}
+          className="bi bi-dash-square-fill"
+        ></i>
+
+        <div id={`${type}-length`}>{time}</div>
+
+        <i
+          id={`${type}-increment`}
+          onClick={() => changeTime(type, 1)}
+          className="bi bi-plus-square-fill"
+        ></i>
+      </div>
+    </div>
   );
 }
 export default App;
