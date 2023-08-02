@@ -1,3 +1,7 @@
+# 25-5 Timer
+
+![25-5-timer](https://github.com/Osgoroth/25-5-timer/assets/46662617/e13cda85-93cf-423c-8289-2782ed4026b0)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
