@@ -65,11 +65,9 @@ function App() {
   function startStopTimer() {
     //toggle timer
     if (isRunning) {
-      console.log("paused");
       stopTicking();
     } else {
       startTicking();
-      console.log("resumed");
     }
     setIsRunning(!isRunning);
 
