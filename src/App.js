@@ -1,5 +1,7 @@
 import "./App.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+import ticking from "./ticking-clock.mp3";
 import alarm from "./alarm.mp3";
 
 function App() {
@@ -11,16 +13,28 @@ function App() {
   const [onBreak, setOnBreak] = useState(false);
   const [status, setStatus] = useState("default");
   const clockInterval = 1000;
-  // tried with local beep file but it doesnt work for some reason TODO: find out why local files are 'unsuitable' to be played
-  const beep =
-    "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav";
+
+  const alarmRef = useRef(null);
+  const tickingRef = useRef(null);
+
+  // const tick = new Audio(ticking);
   function play() {
-    alarm.play();
+    alarmRef.current.play();
   }
 
   function rewind() {
-    alarm.pause();
-    alarm.currentTime = 0;
+    alarmRef.current.pause();
+    alarmRef.current.currentTime = 0;
+  }
+
+  function startTicking() {
+    tickingRef.current.loop = true;
+    tickingRef.current.play();
+  }
+
+  function stopTicking() {
+    tickingRef.current.pause();
+    tickingRef.current.currentTime = 0;
   }
   // when the user presses the start_stop button the timer begins counting down to zero
   useEffect(() => {
@@ -50,7 +64,15 @@ function App() {
 
   function startStopTimer() {
     //toggle timer
+    if (isRunning) {
+      console.log("paused");
+      stopTicking();
+    } else {
+      startTicking();
+      console.log("resumed");
+    }
     setIsRunning(!isRunning);
+
     status === "default" && setStatus("running");
   }
   function resetTimer() {
@@ -92,18 +114,18 @@ function App() {
 
   return (
     <>
-      <div className="App container-sm">
-        <h1>25 + 5 Clock</h1>
+      <div className="App">
+        <h1 id="title">25 + 5 Clock</h1>
         <div id="timer-settings">
           <TimerSetting
-            title={"Break length"}
+            title={"Break"}
             type={"break"}
             time={breakLength}
             changeTime={changeTime}
             formatTime={formatTime}
           />
           <TimerSetting
-            title={"Session Length"}
+            title={"Session"}
             type={"session"}
             time={sessionLength}
             changeTime={changeTime}
@@ -114,49 +136,61 @@ function App() {
         <div id="timer">
           <div id="timer-label">{onBreak ? "Break" : "Session"}</div>
           <div id="time-left">{formatTime(sessionTime)}</div>
-
           <i
             id="start_stop"
             className={`bi ${!isRunning ? "bi-play-fill" : " bi-pause-fill"}`}
             onClick={startStopTimer}
-          ></i>
-
-          <i id="reset" class="bi bi-skip-start-fill" onClick={resetTimer}></i>
-
+          />
+          <i
+            id="reset"
+            className="bi bi-skip-start-fill"
+            onClick={resetTimer}
+          />
           <audio
-            ref={(audio) => (alarm = audio)}
+            ref={alarmRef}
+            type="audio/mp3"
             id="beep"
             preload="auto"
-            src={beep}
+            src={alarm}
+          />
+          <audio
+            ref={tickingRef}
+            type="audio/mp3"
+            id="tick"
+            preload="auto"
+            src={ticking}
           />
         </div>
-      </div>
-      <div id="footer">
-        <p>Written and directed by</p>
-        <p id="creator">David Lucas</p>
+        <div id="footer">
+          <p>Created by</p>
+          <p id="creator">David Lucas</p>
+        </div>
       </div>
     </>
   );
 }
 
-function TimerSetting({ title, type, time, changeTime, formatTime }) {
+function TimerSetting({ title, type, time, changeTime }) {
   return (
-    <div class="timer-group">
-      <div id={`${type}-label`}>{title}</div>
+    <div className="timer-group">
+      <div id={`${type}-label`} className="full-title">
+        {title} length
+      </div>
+      <div id={`${type}-label`} className="short-title">
+        {title}
+      </div>
       <div className="button-group">
         <i
           id={`${type}-decrement`}
           onClick={() => changeTime(type, -1)}
           className="bi bi-dash-square-fill"
-        ></i>
-
+        />
         <div id={`${type}-length`}>{time}</div>
-
         <i
           id={`${type}-increment`}
           onClick={() => changeTime(type, 1)}
           className="bi bi-plus-square-fill"
-        ></i>
+        />
       </div>
     </div>
   );

@@ -1,3 +1,7 @@
+// sensible breakpoints: 600px, 900px, 1200px, 1800px
+$breakpoint-tablet: 600px;
+$breakpoint-desktop: 900px;
+
 *,
 *::before,
 *::after {
@@ -17,44 +21,49 @@ dl,
 dd {
   margin: 0;
 }
-
+html {
+  font-size: 62.5%;
+}
 body {
-
-  background-color: #7EC8E3;
+  background-color: #7ec8e3;
 }
 .App {
   text-align: center;
   font-size: 1.5rem;
-  margin-top: 10%;
-  background-color: #9acde0;
+  margin: 75px auto 0 auto;
   border-radius: 1.5rem;
-  padding: 1.5rem;
-  filter: drop-shadow(0 0 1rem black);
+  max-width: 620px;
+
+  #title {
+    font-size: 4rem;
+  }
 }
 
 #timer-settings {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.timer-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.button-group {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
   align-items: center;
-  text-align: center;
-  
+  .timer-group {
+    width: 200px;
+    .full-title {
+      display: none;
+    }
+    .short-title {
+      display: inline-block;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      // text-align: center;
+    }
+  }
 }
-
-
 
 #time-left {
-  font-size: 4rem;
+  font-size: 6rem;
 }
 
 .bi {
@@ -63,8 +72,7 @@ body {
 }
 
 .bi:hover {
-  color: gray;
-  
+  color: white;
 }
 
 #footer {
@@ -73,7 +81,21 @@ body {
   font-size: 1rem;
 }
 
-
-
-
-
+@media (min-width: $breakpoint-tablet) {
+  .App {
+    font-size: 2rem;
+  }
+  #timer-settings {
+    flex-direction: row;
+    justify-content: center;
+    // align-items: center;
+    .timer-group {
+      .full-title {
+        display: inline-block;
+      }
+      .short-title {
+        display: none;
+      }
+    }
+  }
+}
